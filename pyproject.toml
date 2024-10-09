@@ -1,0 +1,66 @@
+[build-system]
+requires      = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["./src"]  # list of folders that contain the packages (["."] by default)
+include = ["*"]  # package names should match these glob patterns (["*"] by default)
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml"]
+
+[project]
+name = "benchmark-flight-sql"
+version = "0.0.1"
+description = "A package which makes it easy to benchmark a Flight-SQL database performance with query workloads"
+readme = "README.md"
+authors = [{ name = "Philip Moore", email = "prmoore77@hotmail.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["benchmark", "flight-sql", "flight", "sql", "database", "performance", "query", "workload"]
+dependencies = [
+    "click==8.1.*",
+    "pyarrow==17.0.*",
+    "adbc-driver-flightsql==1.2.*",
+    "munch==4.0.*",
+    "pyyaml==6.0.*",
+    "ruamel.yaml==0.18.*",
+    "codetiming==1.4.*",
+    "pandas==2.2.*",
+    "python-dotenv==1.0.*",
+    "openpyxl==3.1.*"
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["bumpver", "pip-tools", "pytest"]
+
+[project.urls]
+Homepage = "https://github.com/gizmodata/benchmark-flight-sql"
+
+[project.scripts]
+benchmark-flight-sql = "benchmark_flight_sql.benchmark:main"
+benchmark-flight-sql-convert-output-to-excel = "benchmark_flight_sql.convert_output_to_excel:convert_output_to_excel"
+
+[tool.bumpver]
+current_version = "0.0.1"
+version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    '^version = "{version}"$',
+    '^current_version = "{version}"$',
+]
+"src/benchmark_flight_sql/__init__.py" = [
+    '^__version__ = "{version}"$',
+]
