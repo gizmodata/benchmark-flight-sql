@@ -1,16 +1,16 @@
+import time
+
+import adbc_driver_flightsql.dbapi as flight_sql
+import click
 import json
 import os
-import time
-from contextlib import contextmanager
-from datetime import datetime
-from pathlib import Path
-
-import click
-import adbc_driver_flightsql.dbapi as flight_sql
 import yaml
 from codetiming import Timer
+from contextlib import contextmanager
+from datetime import datetime
 from dotenv import load_dotenv
 from munch import Munch
+from pathlib import Path
 
 from .config import logging, get_logger, TIMER_TEXT, BENCHMARK_OUTPUT_FILEPATH, QUERIES_DIR
 
@@ -55,7 +55,8 @@ class FlightSQLBenchmark(object):
         self.con = flight_sql.connect(uri=f"grpc+tls://{hostname}:{port}",
                                       db_kwargs={"username": self._username,
                                                  "password": password,
-                                                 "adbc.flight.sql.client_option.tls_skip_verify": str(self._disable_certificate_validation).lower()
+                                                 "adbc.flight.sql.client_option.tls_skip_verify": str(
+                                                     self._disable_certificate_validation).lower()
                                                  }
                                       )
 
@@ -204,7 +205,8 @@ class FlightSQLBenchmark(object):
                 for query in self.benchmark_queries.queries:
                     query_munch = Munch(query)
                     query_batch_run_details = self.run_query_batch(query=query_munch)
-                    self.logger.info(msg=f"Query: {query_batch_run_details.query.query_id} - batch run details: {query_batch_run_details}")
+                    self.logger.info(
+                        msg=f"Query: {query_batch_run_details.query.query_id} - batch run details: {query_batch_run_details}")
                     all_query_run_details.query_run_results.append(query_batch_run_details)
                     all_query_run_details.overall_success_count += query_batch_run_details.success_count
                     all_query_run_details.overall_failure_count += query_batch_run_details.failure_count
@@ -227,21 +229,40 @@ class FlightSQLBenchmark(object):
             self.close_connection()
 
 
-import multiprocessing
-import time
-
-def cpu_bound_task(job_id):
-    """Simulates a CPU-bound job (e.g., heavy computation)"""
-    print(f"Starting job {job_id}")
-    # Simulate CPU-intensive work (replace this with actual computation)
-    time.sleep(2)
-    print(f"Finished job {job_id}")
-
-if __name__ == "__main__":
-    # Create a pool with 10 workers
-    with multiprocessing.Pool(processes=10) as pool:
-        # Map 100 tasks to the worker pool
-        pool.map(cpu_bound_task, range(100))@click.option(
+@click.command()
+@click.option(
+    "--hostname",
+    type=str,
+    default=os.getenv("FLIGHT_HOSTNAME", "localhost"),
+    required=True,
+    show_default=True,
+    help="The Flight SQL server hostname to connect to"
+)
+@click.option(
+    "--port",
+    type=int,
+    default=os.getenv("FLIGHT_PORT", 31337),
+    required=True,
+    show_default=True,
+    help="The Flight SQL server port to connect to"
+)
+@click.option(
+    "--certificate-validation/--no-certificate-validation",
+    type=bool,
+    default=(os.getenv("FLIGHT_CERTIFICATE_VALIDATION", "True").upper() == "TRUE"),
+    show_default=True,
+    required=True,
+    help="Validate the Flight SQL Server''s TLS Certificate"
+)
+@click.option(
+    "--username",
+    type=str,
+    default=os.getenv("FLIGHT_USERNAME", "flight_username"),
+    required=True,
+    show_default=True,
+    help="The username used to connect to Flight SQL"
+)
+@click.option(
     "--password",
     type=str,
     default=os.getenv("FLIGHT_PASSWORD"),
@@ -307,19 +328,19 @@ if __name__ == "__main__":
     default=os.getenv("LOG_FILE_MODE", "w"),
     help="The log file mode, use value: a for 'append', and value: w to overwrite..."
 )
-def main(hostname: str,
-         port: int,
-         certificate_validation: bool,
-         username: str,
-         password: str,
-         schema: str,
-         query_yaml_filename: str,
-         num_query_runs: int,
-         output_filename: str,
-         output_file_mode: str,
-         log_level: int,
-         log_file: str,
-         log_file_mode: str):
+def click_run_benchmark(hostname: str,
+                        port: int,
+                        certificate_validation: bool,
+                        username: str,
+                        password: str,
+                        schema: str,
+                        query_yaml_filename: str,
+                        num_query_runs: int,
+                        output_filename: str,
+                        output_file_mode: str,
+                        log_level: int,
+                        log_file: str,
+                        log_file_mode: str):
     logger = get_logger(filename=log_file,
                         filemode=log_file_mode,
                         logger_name="flight_server",
@@ -346,4 +367,4 @@ def main(hostname: str,
 
 
 if __name__ == '__main__':
-    main()
+    click_run_benchmark()

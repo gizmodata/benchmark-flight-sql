@@ -29,6 +29,12 @@ pip install --editable .[dev]
 
 ```
 
+### Note
+For the following commands - if you running from source and using `--editable` mode (for development purposes) - you will need to set the PYTHONPATH environment variable as follows:
+```shell
+export PYTHONPATH=$(pwd)/src
+```
+
 ### 3. Create .env file in root of repo folder
 Create a .env file in the root folder of the repo - it will be git-ignored for security reasons.   
 

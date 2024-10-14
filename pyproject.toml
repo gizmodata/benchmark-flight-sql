@@ -46,7 +46,7 @@ dev = ["bumpver", "pip-tools", "pytest"]
 Homepage = "https://github.com/gizmodata/benchmark-flight-sql"
 
 [project.scripts]
-benchmark-flight-sql = "benchmark_flight_sql.benchmark:main"
+benchmark-flight-sql = "benchmark_flight_sql.benchmark:click_run_benchmark"
 benchmark-flight-sql-convert-output-to-excel = "benchmark_flight_sql.convert_output_to_excel:convert_output_to_excel"
 
 [tool.bumpver]
