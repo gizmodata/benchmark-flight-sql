@@ -27,8 +27,8 @@ classifiers = [
 keywords = ["benchmark", "flight-sql", "flight", "sql", "database", "performance", "query", "workload"]
 dependencies = [
     "click==8.1.*",
-    "pyarrow==18.1.*",
-    "adbc-driver-flightsql==1.3.*",
+    "pyarrow==19.0.*",
+    "adbc-driver-flightsql==1.5.*",
     "munch==4.0.*",
     "pyyaml==6.0.*",
     "ruamel.yaml==0.18.*",
