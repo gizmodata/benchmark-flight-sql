@@ -3,7 +3,6 @@
 This repo is intended to run benchmark queries against Flight SQL.
 
 ## Setup (to run locally)
-a
 ### 1. Clone the repo
 ```shell
 git clone https://github.com/gizmodata/benchmark-flight-sql
