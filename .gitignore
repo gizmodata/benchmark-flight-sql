@@ -1,6 +1,6 @@
 .venv/
 *.egg-info
-.env
+.env*
 .idea/
 __pycache__/
 data/
