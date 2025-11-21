@@ -17,7 +17,7 @@ name = "benchmark-flight-sql"
 version = "0.0.4"
 description = "A package which makes it easy to benchmark a Flight-SQL database performance with query workloads"
 readme = "README.md"
-authors = [{ name = "Philip Moore", email = "prmoore77@hotmail.com" }]
+authors = [{ name = "Philip Moore", email = "philip@gizmodata.com" }]
 license = { file = "LICENSE" }
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
@@ -28,7 +28,7 @@ keywords = ["benchmark", "flight-sql", "flight", "sql", "database", "performance
 dependencies = [
     "click==8.3.*",
     "pyarrow==22.0.*",
-    "adbc-driver-flightsql==1.8.*",
+    "adbc-driver-flightsql==1.9.*",
     "munch==4.0.*",
     "pyyaml==6.0.*",
     "ruamel.yaml==0.18.*",
