@@ -1,6 +1,6 @@
 import time
 
-import adbc_driver_flightsql.dbapi as flight_sql
+import adbc_driver_gizmosql.dbapi as flight_sql
 import click
 import json
 import os

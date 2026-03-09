@@ -14,11 +14,12 @@ mkdir -p logs
 run_benchmark_flight_sql() {
   local process_number=${1:?You MUST provide a process number!}
 
-  local json_filename=data/benchmark-flight-sql-tpch-sf100-queries-${process_number}.json
-  local xlsx_filename=data/benchmark-flight-sql-tpch-sf100-queries-${process_number}.xlsx
+  local json_filename=data/benchmark-${process_number}.json
+  local xlsx_filename=data/benchmark-${process_number}.xlsx
 
   benchmark-flight-sql \
      --num-query-runs=1 \
+     --query-yaml-filename queries/tpc_h.yaml \
      --output-filename=${json_filename}
 
   # Convert the JSON output to an XLSX file
@@ -31,7 +32,7 @@ export -f run_benchmark_flight_sql
 
 pids=()
 for i in $(seq 0 $((NUM_PROCESSES - 1))); do
-  log_filename=logs/benchmark-flight-sql-tpch-sf100-queries-${i}.log
+  log_filename=logs/benchmark-${i}.log
   nohup bash -c "run_benchmark_flight_sql ${i}" > "${log_filename}" &
   pids+=($!)
 done

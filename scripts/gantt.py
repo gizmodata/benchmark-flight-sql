@@ -10,7 +10,7 @@ query_failure_count: int = 0
 
 for file_number in range(0, 10):
     print(f"File number: {file_number}")
-    file_name = Path(f"data/benchmark-flight-sql-tpch-sf100-queries-{file_number}.json")
+    file_name = Path(f"data/benchmark-{file_number}.json")
 
     with open(file=file_name, mode='r') as f:
         data = munchify(x=json.load(f))
