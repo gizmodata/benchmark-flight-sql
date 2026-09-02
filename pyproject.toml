@@ -14,7 +14,7 @@ include = ["*"]  # package names should match these glob patterns (["*"] by defa
 
 [project]
 name = "benchmark-flight-sql"
-version = "0.0.4"
+version = "0.0.5"
 description = "A package which makes it easy to benchmark a Flight-SQL database performance with query workloads"
 readme = "README.md"
 authors = [{ name = "Philip Moore", email = "philip@gizmodata.com" }]
@@ -28,7 +28,7 @@ keywords = ["benchmark", "flight-sql", "flight", "sql", "database", "performance
 dependencies = [
     "click==8.3.*",
     "pyarrow==23.0.*",
-    "adbc-driver-gizmosql==1.1.*",
+    "adbc-driver-gizmosql==2.0.*",
     "munch==4.0.*",
     "pyyaml==6.0.*",
     "ruamel.yaml==0.18.*",
@@ -50,7 +50,7 @@ benchmark-flight-sql = "benchmark_flight_sql.benchmark:click_run_benchmark"
 benchmark-flight-sql-convert-output-to-excel = "benchmark_flight_sql.convert_output_to_excel:convert_output_to_excel"
 
 [tool.bumpver]
-current_version = "0.0.4"
+current_version = "0.0.5"
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
