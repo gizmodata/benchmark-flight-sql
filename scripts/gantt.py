@@ -4,11 +4,13 @@ from pathlib import Path
 import json
 from munch import munchify, Munch
 
+NUM_SESSIONS: int = 25
+
 gantt_data = munchify(x={"Task": [], "Start": [], "Finish": []})
 query_success_count: int = 0
 query_failure_count: int = 0
 
-for file_number in range(0, 10):
+for file_number in range(0, NUM_SESSIONS):
     print(f"File number: {file_number}")
     file_name = Path(f"data/benchmark-{file_number}.json")
 
