@@ -42,7 +42,7 @@ def convert_output_to_excel(input_filename: str,
     df = pd.json_normalize(data=run_data_dict,
                            record_path=["query_run_results"],
                            meta=["run_date", "hostname", "port", "disable_certificate_validation", "username",
-                                 "schema", "query_yaml_filename", "database_version",
+                                 "database", "schema", "query_yaml_filename", "database_version",
                                  "overall_start_datetime", "overall_start_time", "overall_success_count",
                                  "overall_failure_count", "overall_end_datetime", "overall_end_time",
                                  "overall_run_time"]

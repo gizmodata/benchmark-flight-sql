@@ -10,7 +10,7 @@ git clone https://github.com/gizmodata/benchmark-flight-sql
 ```
 
 ### 2. Setup Python
-Create a new Python 3.8+ virtual environment and install the requirements with:
+Create a new Python 3.11+ virtual environment and install the requirements with:
 ```shell
 cd benchmark-flight-sql
 
@@ -23,7 +23,7 @@ python3 -m venv .venv
 # Upgrade pip, setuptools, and wheel
 pip install --upgrade pip setuptools wheel
 
-# Install the benchmark-snowflake package (in editable mode)
+# Install the benchmark-flight-sql package (in editable mode)
 pip install --editable .[dev]
 
 ```
@@ -53,6 +53,13 @@ benchmark-flight-sql
 ```
 
 Note: this will create a file in the [data](data) directory called: "benchmark_results.json" with the query run details.   
+
+### Tables in an attached database or a DuckLake catalog
+If the benchmark tables live outside the session's default database (e.g. a DuckDB file `ATTACH`ed as `tpch`, or a DuckLake catalog mount), pass `--database` (or set `FLIGHT_DATABASE`) and the session runs `USE <database>.<schema>` before the queries:
+```shell
+benchmark-flight-sql --database tpch --schema main
+benchmark-flight-sql --database my_ducklake --schema sf1000
+```
 
 To see more options:
 ```shell

@@ -30,7 +30,8 @@ class FlightSQLBenchmark(object):
                  num_query_runs: int,
                  output_filename: Path,
                  output_file_mode: str,
-                 logger
+                 logger,
+                 database: str = None
                  ):
         self.logger = logger
 
@@ -39,6 +40,7 @@ class FlightSQLBenchmark(object):
         self._disable_certificate_validation = disable_certificate_validation
 
         self._username = username
+        self._database = database
         self._schema = schema
         self._query_yaml_filename = query_yaml_filename
         self._num_query_runs = num_query_runs
@@ -47,6 +49,7 @@ class FlightSQLBenchmark(object):
         self.logger.info(msg=(f"Connecting to Flight SQL hostname: {self._hostname}\n"
                               f"Port: {self._port}\n"
                               f"Validate Server Certificate: {(not self._disable_certificate_validation)}\n"
+                              f"Database: {self._database}\n"
                               f"Schema: {self._schema}\n"
                               f"- with username: {self._username}"
                               )
@@ -60,9 +63,12 @@ class FlightSQLBenchmark(object):
                                                  }
                                       )
 
-        # Set the schema...
+        # Set the database (catalog) and schema the queries resolve against...
         with self.con.cursor() as cur:
-            cur.execute(operation=f"SET schema={self._schema}")
+            if self._database:
+                cur.execute(operation=f"USE {self._database}.{self._schema}")
+            else:
+                cur.execute(operation=f"SET schema={self._schema}")
 
         # Load the benchmark queries
         with open(file=Path(self._query_yaml_filename), mode="r") as yaml_file:
@@ -185,6 +191,7 @@ class FlightSQLBenchmark(object):
                                           port=self._port,
                                           disable_certificate_validation=self._disable_certificate_validation,
                                           username=self._username,
+                                          database=self._database,
                                           schema=self._schema,
                                           query_yaml_filename=self._query_yaml_filename,
                                           overall_start_datetime=datetime.now().astimezone(),
@@ -193,7 +200,7 @@ class FlightSQLBenchmark(object):
                                           overall_failure_count=0,
                                           query_run_results=[])
 
-            # Get the Snowflake version
+            # Get the database engine version
             with self.execute_sql(command="SELECT VERSION()") as cursor:
                 all_query_run_details.database_version = cursor.fetchone()[0]
 
@@ -271,6 +278,14 @@ class FlightSQLBenchmark(object):
     help="The password used to connect to Flight SQL"
 )
 @click.option(
+    "--database",
+    type=str,
+    default=os.getenv("FLIGHT_DATABASE"),
+    required=False,
+    show_default=True,
+    help="The database (DuckDB catalog) holding the benchmark tables, e.g. an ATTACHed file or a DuckLake mount.  If set, the session runs: USE <database>.<schema>"
+)
+@click.option(
     "--schema",
     type=str,
     default=os.getenv("FLIGHT_SCHEMA", "main"),
@@ -333,6 +348,7 @@ def click_run_benchmark(hostname: str,
                         certificate_validation: bool,
                         username: str,
                         password: str,
+                        database: str,
                         schema: str,
                         query_yaml_filename: str,
                         num_query_runs: int,
@@ -356,6 +372,7 @@ def click_run_benchmark(hostname: str,
                                               disable_certificate_validation=(not certificate_validation),
                                               username=username,
                                               password=password,
+                                              database=database,
                                               schema=schema,
                                               query_yaml_filename=query_yaml_filename,
                                               num_query_runs=num_query_runs,
